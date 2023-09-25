@@ -17,12 +17,17 @@ import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import IconBox from "components/Icons/IconBox";
-import { MastercardIcon, VisaIcon } from "components/Icons/Icons";
+import { MastercardIcon, VisaIcon, DashboardLogo } from "components/Icons/Icons";
 import { HSeparator } from "components/Separator/Separator";
 import BillingRow from "components/Tables/BillingRow";
 import InvoicesRow from "components/Tables/InvoicesRow";
 import TransactionRow from "components/Tables/TransactionRow";
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+
+import '@toast-ui/editor/dist/toastui-editor.css';
+import { Editor } from '@toast-ui/react-editor';
+
 import {
   FaPaypal,
   FaPencilAlt,
@@ -44,146 +49,109 @@ function Writing() {
   const borderColor = useColorModeValue("#dee2e6", "transparent");
   const { colorMode } = useColorMode();
 
-  console.log(colorMode);
+  const [myText, setMyText] = useState('');
+  const [file, setMyFile] = useState();
+
+  const handleFormSubmit = async () => {
+    try {
+      console.log("등록 버튼이 눌림");
+      console.log("입력한 텍스트: ", myText.getInstance().getMarkdown());
+      console.log("입력한 이미지: ", file);
+      const formData = new FormData();
+      formData.append('text', myText);
+      // 서버 URL을 지정합니다. 여기서는 예시로 'your-server-url'로 표시했습니다.
+      const serverUrl = process.env.SERVER_IP
+
+      // Axios를 사용하여 POST 요청을 보냅니다.
+      await axios.post(serverUrl, formData);
+
+      // 요청이 성공하면 사용자에게 성공 메시지를 표시하거나 다른 작업을 수행할 수 있습니다.
+      alert('등록되었습니다.');
+    } catch (error) {
+      // 요청이 실패한 경우 에러를 처리합니다.
+      console.error('등록 실패:', error);
+    }
+  }
+
+  const fetchUploadImage = async (blob) => {
+    console.log("Blob: ", blob);
+
+    // 이미지를 axios.post를 이용해 서버로 전달 후 파일에 저장. 그리고 리턴된 주소를 path 에 저장
+
+    // return path
+    
+  }
+
+  const onUploadImage = async (blob, callback) => {
+    console.log("@@: ", blob);
+
+    setMyFile(blob);
+
+    // return false;
+
+    // fetchUploadImage(blob).then((path) => {
+    //   console.log(path);
+    //   callback(path, blob.name);
+    // });
+
+    console.log("Test", blob);
+    callback(path, blob.name);
+    // return false;
+    // console.log("fetchUploadImageResult: ", fetchUploadImageResult)
+
+  };
+
+
 
   return (
     <Flex direction='column' pt={{ base: "120px", md: "75px" }}>
+
+      <Grid
+        templateColumns={{
+          sm: "1fr",
+          md: "1fr 1fr",
+          xl: "1fr 1fr 1fr 1fr",
+        }}
+        templateRows={{ sm: "auto auto auto", md: "1fr auto", xl: "1fr" }}
+        gap='26px'>
+
+        <Card p='16px' display='flex' align='center' justify='center'>
+          <CardBody>
+            <Flex direction='column' align='center' w='100%' py='14px'>
+              <IconBox as='box' h={"60px"} w={"60px"} bg={iconBlue}>
+                <Icon h={"24px"} w={"24px"} color='white' as={FaWallet} />
+              </IconBox>
+              <Flex
+                direction='column'
+                m='14px'
+                justify='center'
+                textAlign='center'
+                align='center'
+                w='100%'>
+                <Text fontSize='md' color={textColor} fontWeight='bold'>
+                  책 제목
+                </Text>
+                <Text
+                  mb='24px'
+                  fontSize='xs'
+                  color='gray.400'
+                  fontWeight='semibold'>
+                  책 소개
+                </Text>
+                <HSeparator />
+              </Flex>
+              <Text fontSize='lg' color={textColor} fontWeight='bold'>
+                +$2000
+              </Text>
+            </Flex>
+          </CardBody>
+        </Card>
+      </Grid>
+
       <Grid templateColumns={{ sm: "1fr", lg: "2fr 1.2fr" }} templateRows='1fr'>
         <Box>
-          <Grid
-            templateColumns={{
-              sm: "1fr",
-              md: "1fr 1fr",
-              xl: "1fr 1fr 1fr 1fr",
-            }}
-            templateRows={{ sm: "auto auto auto", md: "1fr auto", xl: "1fr" }}
-            gap='26px'>
-            <Card
-              backgroundImage={
-                colorMode === "dark"
-                  ? "linear-gradient(180deg, #3182CE 0%, #63B3ED 100%)"
-                  : BackgroundCard1
-              }
-              backgroundRepeat='no-repeat'
-              background='cover'
-              bgPosition='10%'
-              p='16px'
-              h={{ sm: "220px", xl: "100%" }}
-              gridArea={{ md: "1 / 1 / 2 / 3", xl: "1 / 1 / 2 / 3" }}>
-              <CardBody h='100%' w='100%'>
-                <Flex
-                  direction='column'
-                  color='white'
-                  h='100%'
-                  p='0px 10px 20px 10px'
-                  w='100%'>
-                  <Flex justify='space-between' align='center'>
-                    <Text fontSize='md' fontWeight='bold'>
-                      Argon x Chakra
-                    </Text>
-                    <Icon
-                      as={RiMastercardFill}
-                      w='48px'
-                      h='auto'
-                      color='gray.400'
-                    />
-                  </Flex>
-                  <Spacer />
-                  <Flex direction='column'>
-                    <Box>
-                      <Text
-                        fontSize='2xl'
-                        letterSpacing='2px'
-                        fontWeight='bold'>
-                        7812 2139 0823 XXXX
-                      </Text>
-                    </Box>
-                    <Flex mt='14px'>
-                      <Flex direction='column' me='34px'>
-                        <Text fontSize='xs'>VALID THRU</Text>
-                        <Text fontSize='xs' fontWeight='bold'>
-                          05/24
-                        </Text>
-                      </Flex>
-                      <Flex direction='column'>
-                        <Text fontSize='xs'>CVV</Text>
-                        <Text fontSize='xs' fontWeight='bold'>
-                          09X
-                        </Text>
-                      </Flex>
-                    </Flex>
-                  </Flex>
-                </Flex>
-              </CardBody>
-            </Card>
-            <Card p='16px' display='flex' align='center' justify='center'>
-              <CardBody>
-                <Flex direction='column' align='center' w='100%' py='14px'>
-                  <IconBox as='box' h={"60px"} w={"60px"} bg={iconBlue}>
-                    <Icon h={"24px"} w={"24px"} color='white' as={FaWallet} />
-                  </IconBox>
-                  <Flex
-                    direction='column'
-                    m='14px'
-                    justify='center'
-                    textAlign='center'
-                    align='center'
-                    w='100%'>
-                    <Text fontSize='md' color={textColor} fontWeight='bold'>
-                      Salary
-                    </Text>
-                    <Text
-                      mb='24px'
-                      fontSize='xs'
-                      color='gray.400'
-                      fontWeight='semibold'>
-                      Belong Interactive
-                    </Text>
-                    <HSeparator />
-                  </Flex>
-                  <Text fontSize='lg' color={textColor} fontWeight='bold'>
-                    +$2000
-                  </Text>
-                </Flex>
-              </CardBody>
-            </Card>
-            <Card p='16px' display='flex' align='center' justify='center'>
-              <CardBody>
-                <Flex
-                  direction='column'
-                  align='center'
-                  justify='center'
-                  w='100%'
-                  py='14px'>
-                  <IconBox as='box' h={"60px"} w={"60px"} bg={iconBlue}>
-                    <Icon h={"24px"} w={"24px"} color='white' as={FaPaypal} />
-                  </IconBox>
-                  <Flex
-                    direction='column'
-                    m='14px'
-                    justify='center'
-                    textAlign='center'
-                    align='center'
-                    w='100%'>
-                    <Text fontSize='md' color={textColor} fontWeight='bold'>
-                      Paypal
-                    </Text>
-                    <Text
-                      mb='24px'
-                      fontSize='xs'
-                      color='gray.400'
-                      fontWeight='semibold'>
-                      Freelance Payment
-                    </Text>
-                    <HSeparator />
-                  </Flex>
-                  <Text fontSize='lg' color={textColor} fontWeight='bold'>
-                    $455.00
-                  </Text>
-                </Flex>
-              </CardBody>
-            </Card>
-          </Grid>
+
+          {/* 글 쓰기 텍스트창 시작 */}
           <Card p='16px' mt='24px'>
             <CardHeader>
               <Flex
@@ -194,9 +162,6 @@ function Writing() {
                 <Text fontSize='lg' color={textColor} fontWeight='bold'>
                   글 쓰기
                 </Text>
-                <Button variant={colorMode === "dark" ? "primary" : "dark"}>
-                  ADD A NEW CARD
-                </Button>
               </Flex>
             </CardHeader>
             <CardBody>
@@ -216,50 +181,47 @@ function Writing() {
                   align='center'
                   mb={{ sm: "24px", md: "0px" }}
                   me={{ sm: "0px", md: "24px" }}>
-                  <IconBox me='10px' w='25px' h='22px'>
-                    <MastercardIcon w='100%' h='100%' />
-                  </IconBox>
-                  <Text color='gray.400' fontSize='md' fontWeight='semibold'>
-                    7812 2139 0823 XXXX
-                  </Text>
-                  <Spacer />
-                  <Button p='0px' w='16px' h='16px' variant='no-effects'>
-                    <Icon
-                      as={FaPencilAlt}
-                      color={colorMode === "dark" && "white"}
-                    />
-                  </Button>
-                </Flex>
-                <Flex
-                  p='16px'
-                  bg={colorMode === "dark" ? "navy.900" : "transparent"}
-                  borderRadius='15px'
-                  width='100%'
-                  border='1px solid'
-                  borderColor={borderColor}
-                  align='center'>
-                  <IconBox me='10px' w='25px' h='25px'>
-                    <VisaIcon w='100%' h='100%' />
-                  </IconBox>
-                  <Text color='gray.400' fontSize='md' fontWeight='semibold'>
-                    7812 2139 0823 XXXX
-                  </Text>
-                  <Spacer />
-                  <Button
-                    p='0px'
-                    bg='transparent'
-                    w='16px'
-                    h='16px'
-                    variant='no-effects'>
-                    <Icon
-                      as={FaPencilAlt}
-                      color={colorMode === "dark" && "white"}
-                    />
-                  </Button>
+
+                  {/* <input
+                    type="text"
+                    placeholder="Enter text here"
+                    style={{
+                      color: 'gray.400',
+                      fontSize: 'md',
+                      fontWeight: 'semibold'
+                    }}
+                    value={myText}
+                    onChange={handleMyTextChange}
+                  /> */}
+
+                  <Editor
+                    initialValue="내용을 입력해주세요."
+                    previewStyle="vertical"
+                    height="600px"
+                    // initialEditType="markdown"
+                    initialEditType="wysiwyg"
+                    useCommandShortcut={true}
+                    ref={(editor) => {
+                      // Editor 컴포넌트의 인스턴스를 참조합니다.
+                      setMyText(editor);
+                      onUploadImage
+                    }}
+                    hooks={{
+                      addImageBlobHook: onUploadImage,
+                    }}
+                  />
                 </Flex>
               </Flex>
+
+              <Spacer />
+              <Button variant={colorMode === "dark" ? "primary" : "dark"}
+                onClick={handleFormSubmit}>
+                등록
+              </Button>
             </CardBody>
           </Card>
+          {/* 글 쓰기 텍스트창 끝 */}
+
         </Box>
         <Card
           p='22px'
@@ -304,7 +266,7 @@ function Writing() {
           <Flex direction='column'>
             <CardHeader py='12px'>
               <Text color={textColor} fontSize='lg' fontWeight='bold'>
-                Billing Information
+                글 목록
               </Text>
             </CardHeader>
             <CardBody>

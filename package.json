@@ -14,7 +14,9 @@
 		"@fontsource/open-sans": "^4.5.0",
 		"@fontsource/raleway": "^4.5.0",
 		"@fontsource/roboto": "^4.5.0",
+		"@toast-ui/react-editor": "^3.2.3",
 		"apexcharts": "^3.27.3",
+		"axios": "^1.5.0",
 		"classnames": "2.3.1",
 		"framer-motion": "4.1.17",
 		"match-sorter": "6.3.0",
@@ -65,7 +67,15 @@
 		"prettier": "2.2.1"
 	},
 	"browserslist": {
-		"production": [ ">0.2%", "not dead", "not op_mini all" ],
-		"development": [ "last 1 chrome version", "last 1 firefox version", "last 1 safari version" ]
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
 	}
 }

@@ -329,22 +329,30 @@ export const invoicesData = [
 
 export const billingData = [
   {
-    name: "Oliver Liam",
+    name: "Oliver Liam",  // 내 글
     company: "Viking Burrito",
     email: "oliver@burrito.com",
     number: "FRB1235476",
+    type: "mine"
   },
   {
     name: "Lucas Harper",
     company: "Stone Tech Zone",
     email: "lucas@stone-tech.com",
-    number: "FRB1235476",
+    number: "mine",
   },
   {
     name: "Ethan James",
     company: "Fiber Notion",
     email: "ethan@fiber.com",
+    number: "others",
+  },
+  {
+    name: "글 A",
+    company: "Fiber Notion",
+    email: "ethan@fiber.com",
     number: "FRB1235476",
+    type: "others"
   },
 ];
 
